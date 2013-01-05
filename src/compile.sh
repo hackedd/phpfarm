@@ -56,51 +56,23 @@ if [ ! -d "$srcdir" ]; then
     if [ ! -e "$srcfile" ]; then
         echo 'Source file not found:'
         echo "$srcfile"
-        url="http://museum.php.net/php$VMAJOR/php-$SHORT_VERSION.tar.bz2"
-        wget -P "$bzipsdir" "$url"
-        if [ ! -f "$srcfile" ]; then
-            echo "Fetching sources from museum failed"
-            echo $url
-            #museum failed, now we try real download
-            url="http://www.php.net/get/php-$SHORT_VERSION.tar.bz2/from/this/mirror"
-            wget -P "$bzipsdir" -O "$srcfile" "$url"
-        fi
-        if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
-            rm "$srcfile"
-        fi
 
-        if [ ! -f "$srcfile" ]; then
-            echo "Fetching sources from official download site failed"
-            echo $url
-            #use ilia's RC (5.3.x)
-            url="https://downloads.php.net/ilia/php-$SHORT_VERSION.tar.bz2"
-            wget -P "$bzipsdir" -O "$srcfile" "$url"
-        fi
-        if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
-            rm "$srcfile"
-        fi
+        # Array of locations to try. Try museum before main for backwards compatibility.
+        urls=( "http://museum.php.net/php$VMAJOR/php-$SHORT_VERSION.tar.bz2"
+               "http://www.php.net/get/php-$SHORT_VERSION.tar.bz2/from/this/mirror"
+               "https://downloads.php.net/ilia/php-$SHORT_VERSION.tar.bz2"
+               "https://downloads.php.net/stas/php-$SHORT_VERSION.tar.bz2"
+               "https://downloads.php.net/dsp/php-$SHORT_VERSION.tar.bz2" )
 
-        if [ ! -f "$srcfile" ]; then
-            echo "Fetching sources from ilia's site failed"
-            echo $url
-            #use stas's RC (5.4.x)
-            url="https://downloads.php.net/stas/php-$SHORT_VERSION.tar.bz2"
+		for url in "${urls[@]}"; do
             wget -P "$bzipsdir" -O "$srcfile" "$url"
-        fi
-        if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
-            rm "$srcfile"
-        fi
-
-        if [ ! -f "$srcfile" ]; then
-            echo "Fetching sources from stas's site failed"
-            echo $url
-            #use dsp's RC (5.5.x)
-            url="https://downloads.php.net/dsp/php-$SHORT_VERSION.tar.bz2"
-            wget -P "$bzipsdir" -O "$srcfile" "$url"
-        fi
-        if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
-            rm "$srcfile"
-        fi
+            if [ $? -eq 0 ]; then
+                break
+            fi
+            if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
+                rm "$srcfile"
+            fi
+        done
 
         if [ ! -f "$srcfile" ]; then
             echo "Fetching sources failed:" >&2
