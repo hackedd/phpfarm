@@ -51,6 +51,18 @@ all ``./configure`` options.
 Do not try to change ``prefix`` and ``exec-prefix``.
 
 
+Patching
+--------
+phpfarm will automatically apply patches found in the ``custom/`` directory:
+
+- ``custom/php5-something.patch``
+- ``custom/php5.3-something.patch``
+- ``custom/php5.3.1-something.patch``
+
+Patches will be applied using ``patch -p1`` with the PHP source directory as
+working directory. Patches will be aplied directly after extracting the
+source from the archive (before applying the Suhosin patch).
+
 php.ini customization
 ---------------------
 ``php.ini`` values may also be customized:

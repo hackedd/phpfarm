@@ -82,6 +82,17 @@ if [ ! -d "$srcdir" ]; then
     fi
     #extract
     tar xjvf "$srcfile" --show-transformed-names --xform 's#^[^/]*#php-'"$VERSION"'#'
+
+    for suffix in "-$VMAJOR" "-$VMAJOR.$VMINOR" "-$VMAJOR.$VMINOR.$VPATCH"; do
+        for patch in "custom/php$suffix-*.patch"; do
+            [[ -e "$patch" ]] || continue
+            patch -p1 -d "$basedir/$srcdir" < "$patch"
+            if [ $? -ne 0 ]; then
+                echo "Failed to apply $patch"
+                exit 2
+            fi
+        done
+    done
 fi
 
 #do we need the Suhosin patch?
