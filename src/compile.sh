@@ -68,7 +68,8 @@ if [ ! -d "$srcdir" ]; then
                "http://$mirror/get/php-$SHORT_VERSION.tar.bz2/from/this/mirror"
                "https://downloads.php.net/ilia/php-$SHORT_VERSION.tar.bz2"
                "https://downloads.php.net/stas/php-$SHORT_VERSION.tar.bz2"
-               "https://downloads.php.net/dsp/php-$SHORT_VERSION.tar.bz2" )
+               "https://downloads.php.net/dsp/php-$SHORT_VERSION.tar.bz2"
+               "https://downloads.php.net/tyrael/php-$SHORT_VERSION.tar.bz2" )
 
 		for url in "${urls[@]}"; do
             wget -P "$bzipsdir" -O "$srcfile" "$url"
