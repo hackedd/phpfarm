@@ -66,7 +66,7 @@ if [ ! -d "$srcdir" ]; then
 
 		for url in "${urls[@]}"; do
             wget -P "$bzipsdir" -O "$srcfile" "$url"
-            if [ $? -eq 0 ]; then
+            if [ $? -eq 0 ] && ! grep -q "<h1>Download not found</h1>" "$srcfile"; then
                 break
             fi
             if [ ! -s "$srcfile" -a -f "$srcfile" ]; then
