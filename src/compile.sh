@@ -57,9 +57,15 @@ if [ ! -d "$srcdir" ]; then
         echo 'Source file not found:'
         echo "$srcfile"
 
+        if [ -f custom/mirror ]; then
+            mirror=$(<custom/mirror)
+        else
+            mirror="www.php.net"
+        fi
+
         # Array of locations to try. Try museum before main for backwards compatibility.
         urls=( "http://museum.php.net/php$VMAJOR/php-$SHORT_VERSION.tar.bz2"
-               "http://www.php.net/get/php-$SHORT_VERSION.tar.bz2/from/this/mirror"
+               "http://$mirror/get/php-$SHORT_VERSION.tar.bz2/from/this/mirror"
                "https://downloads.php.net/ilia/php-$SHORT_VERSION.tar.bz2"
                "https://downloads.php.net/stas/php-$SHORT_VERSION.tar.bz2"
                "https://downloads.php.net/dsp/php-$SHORT_VERSION.tar.bz2" )
